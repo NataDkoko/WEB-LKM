@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 html {
     scroll-behavior: smooth;
 }
@@ -423,7 +422,7 @@ html {
     .experience-badge {
         right: 10px; /* Menyesuaikan posisi di HP */
     }
-=======
+}
 html {
     scroll-behavior: smooth;
 }
@@ -848,5 +847,4 @@ html {
     .experience-badge {
         right: 10px; /* Menyesuaikan posisi di HP */
     }
->>>>>>> 063ec696f3d0131be62247d9ca52cf1a36122b27
 }

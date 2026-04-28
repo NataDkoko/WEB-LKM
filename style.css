@@ -1,0 +1,852 @@
+<<<<<<< HEAD
+html {
+    scroll-behavior: smooth;
+}
+
+/* 1. RESET: Menghilangkan margin bawaan browser */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Variabel Warna agar mudah diganti */
+:root {
+    --navy: #0f172a;
+    --mint: #10b981;
+    --mint-light: #a7f3d0;
+    --gray: #64748b;
+    --bg: #ffffff;
+}
+
+/* 2. UTILITY: Pengaturan container agar konten di tengah */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 3. NAVBAR */
+.navbar {
+    padding: 20px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #1e40af;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--navy);
+    font-size: 0.9rem;
+}
+
+.nav-links a.active {
+    color: var(--mint);
+    border-bottom: 2px solid var(--mint);
+}
+
+.btn-signin {
+    background: var(--navy);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* 4. HERO SECTION */
+.hero {
+    display: flex;
+    align-items: center;
+    padding: 80px 20px;
+    gap: 50px;
+}
+
+.hero-text { flex: 1; }
+
+.sub-title {
+    color: var(--mint);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    margin: 15px 0;
+    line-height: 1.1;
+}
+
+.hero-text p {
+    color: var(--gray);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.hero-action { display: flex; gap: 15px; }
+
+.btn-primary {
+    background: var(--navy);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.hero-image-container { flex: 1; }
+
+.hero-img {
+    width: 100%;
+    border-radius: 20px;
+    /* Efek shadow hijau di belakang foto sesuai desain */
+    box-shadow: 20px 20px 0px var(--mint-light);
+}
+
+/* 5. TEAM SECTION (HYBRID GRID) */
+.team { padding: 80px 20px; }
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+}
+
+/* Teknik Centering untuk baris terakhir (The Hybrid Grid) */
+.team-grid {
+    display: flex;
+    flex-wrap: wrap; /* Agar kartu pindah ke baris baru */
+    justify-content: center; /* Membuat baris terakhir (3 orang) otomatis ke tengah */
+    gap: 30px;
+}
+
+.team-card {
+    background: #fff;
+    width: calc(25% - 30px); /* 4 kolom pada layar desktop */
+    min-width: 260px;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+    border: 1px solid #f1f5f9;
+}
+
+.team-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+.team-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.team-info { padding: 20px; }
+
+.role {
+    color: var(--mint);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.team-info h3 { margin-bottom: 10px; font-size: 1.1rem; }
+
+.team-info p {
+    font-size: 0.85rem;
+    color: var(--gray);
+    line-height: 1.5;
+}
+
+/* 6. RESPONSIVE: Agar bagus di HP */
+@media (max-width: 768px) {
+    .hero { flex-direction: column; text-align: center; }
+    .hero-action { justify-content: center; }
+    .team-card { width: 100%; }
+}
+
+/* --- 7. MATERI SECTION (HORIZONTAL SCROLL) --- */
+.materi {
+    padding: 80px 20px;
+    background-color: var(--bg); /* Warna latar putih */
+}
+
+.section-header {
+    margin-bottom: 30px;
+}
+
+.section-subtitle {
+    color: var(--gray);
+    font-size: 1rem;
+    margin-top: -30px;
+    margin-bottom: 20px;
+}
+
+/* KUNCI UTAMA HORIZONTAL SCROLL */
+.modules-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; /* Memaksa konten yang melebihi batas untuk bisa di-scroll ke samping */
+    padding: 10px 0 30px 0; /* Memberi ruang agar box-shadow tidak terpotong */
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory; /* Membuat scroll terasa seperti slider/carousel yang patahnya rapi */
+}
+
+/* Kustomisasi Tampilan Scrollbar agar Estetik */
+.modules-wrapper::-webkit-scrollbar {
+    height: 8px; /* Tinggi scrollbar bawah */
+}
+.modules-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9; 
+    border-radius: 10px;
+}
+.modules-wrapper::-webkit-scrollbar-thumb {
+    background: var(--mint); 
+    border-radius: 10px;
+}
+.modules-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #059669; /* Warna hijau sedikit lebih gelap saat scrollbar disentuh */
+}
+
+/* KARTU MATERI */
+.module-card {
+    flex: 0 0 320px; /* Kunci 2: flex-grow 0, flex-shrink 0, lebar tetap 320px. Agar kartu tidak menciut. */
+    scroll-snap-align: start; /* Titik henti saat di-scroll */
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none; /* Menghilangkan garis bawah bawaan tag <a> */
+    color: inherit; /* Teks mengikuti warna parent */
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.module-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1);
+    border-color: var(--mint-light);
+}
+
+.module-image {
+    position: relative;
+    height: 180px;
+}
+
+.module-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Label kategori di atas gambar */
+.module-category {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.module-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Mendorong tombol 'Mulai Belajar' ke bagian paling bawah */
+}
+
+.module-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: var(--navy);
+}
+
+.module-content p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-bottom: 24px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.read-more {
+    color: var(--mint);
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: gap 0.3s;
+}
+
+/* Animasi panah bergerak saat kartu di-hover */
+.module-card:hover .read-more {
+    gap: 12px;
+}
+
+/* --- 8. ABOUT SECTION --- */
+.about {
+    padding: 100px 0;
+    background-color: #f8fafc; /* Warna latar abu-abu muda agar selang-seling dengan bagian materi */
+}
+
+.about-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 70px; /* Jarak antara teks dan gambar */
+}
+
+/* Kiri: Teks */
+.about-text {
+    flex: 1;
+}
+
+.lead-text {
+    font-size: 1.2rem;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.about-text p:not(.lead-text) {
+    color: var(--gray);
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+/* List dengan icon Checkmark */
+.about-features {
+    list-style: none;
+}
+
+.about-features li {
+    margin-bottom: 15px;
+    color: var(--navy);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.check-icon {
+    background: var(--mint-light);
+    color: #059669; /* Hijau tua agar kontras */
+    width: 26px;
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Kanan: Gambar */
+.about-image {
+    flex: 1;
+    position: relative; /* Penting sebagai patokan Badge melayang */
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 20px;
+    /* Memberikan efek bayangan kotak hijau ke arah berlawanan (kiri bawah) */
+    box-shadow: -20px 20px 0px var(--mint-light); 
+}
+
+/* Badge Melayang ala Web Profesional */
+.experience-badge {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    background: var(--navy);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+}
+
+.experience-badge h3 {
+    font-size: 2.2rem;
+    color: var(--mint);
+    margin-bottom: 5px;
+}
+
+.experience-badge p {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
+/* Responsive: Jika layar di HP/Tablet */
+@media (max-width: 992px) {
+    .about-wrapper {
+        flex-direction: column; /* Teks di atas, Gambar di bawah */
+    }
+    .about-image {
+        margin-top: 40px;
+        width: 90%; /* Agar tidak terlalu mepet tepi di HP */
+    }
+    .experience-badge {
+        right: 10px; /* Menyesuaikan posisi di HP */
+    }
+=======
+html {
+    scroll-behavior: smooth;
+}
+
+/* 1. RESET: Menghilangkan margin bawaan browser */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Variabel Warna agar mudah diganti */
+:root {
+    --navy: #0f172a;
+    --mint: #10b981;
+    --mint-light: #a7f3d0;
+    --gray: #64748b;
+    --bg: #ffffff;
+}
+
+/* 2. UTILITY: Pengaturan container agar konten di tengah */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 3. NAVBAR */
+.navbar {
+    padding: 20px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #1e40af;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--navy);
+    font-size: 0.9rem;
+}
+
+.nav-links a.active {
+    color: var(--mint);
+    border-bottom: 2px solid var(--mint);
+}
+
+.btn-signin {
+    background: var(--navy);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* 4. HERO SECTION */
+.hero {
+    display: flex;
+    align-items: center;
+    padding: 80px 20px;
+    gap: 50px;
+}
+
+.hero-text { flex: 1; }
+
+.sub-title {
+    color: var(--mint);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    margin: 15px 0;
+    line-height: 1.1;
+}
+
+.hero-text p {
+    color: var(--gray);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.hero-action { display: flex; gap: 15px; }
+
+.btn-primary {
+    background: var(--navy);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.hero-image-container { flex: 1; }
+
+.hero-img {
+    width: 100%;
+    border-radius: 20px;
+    /* Efek shadow hijau di belakang foto sesuai desain */
+    box-shadow: 20px 20px 0px var(--mint-light);
+}
+
+/* 5. TEAM SECTION (HYBRID GRID) */
+.team { padding: 80px 20px; }
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+}
+
+/* Teknik Centering untuk baris terakhir (The Hybrid Grid) */
+.team-grid {
+    display: flex;
+    flex-wrap: wrap; /* Agar kartu pindah ke baris baru */
+    justify-content: center; /* Membuat baris terakhir (3 orang) otomatis ke tengah */
+    gap: 30px;
+}
+
+.team-card {
+    background: #fff;
+    width: calc(25% - 30px); /* 4 kolom pada layar desktop */
+    min-width: 260px;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+    border: 1px solid #f1f5f9;
+}
+
+.team-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+.team-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.team-info { padding: 20px; }
+
+.role {
+    color: var(--mint);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.team-info h3 { margin-bottom: 10px; font-size: 1.1rem; }
+
+.team-info p {
+    font-size: 0.85rem;
+    color: var(--gray);
+    line-height: 1.5;
+}
+
+/* 6. RESPONSIVE: Agar bagus di HP */
+@media (max-width: 768px) {
+    .hero { flex-direction: column; text-align: center; }
+    .hero-action { justify-content: center; }
+    .team-card { width: 100%; }
+}
+
+/* --- 7. MATERI SECTION (HORIZONTAL SCROLL) --- */
+.materi {
+    padding: 80px 20px;
+    background-color: var(--bg); /* Warna latar putih */
+}
+
+.section-header {
+    margin-bottom: 30px;
+}
+
+.section-subtitle {
+    color: var(--gray);
+    font-size: 1rem;
+    margin-top: -30px;
+    margin-bottom: 20px;
+}
+
+/* KUNCI UTAMA HORIZONTAL SCROLL */
+.modules-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; /* Memaksa konten yang melebihi batas untuk bisa di-scroll ke samping */
+    padding: 10px 0 30px 0; /* Memberi ruang agar box-shadow tidak terpotong */
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory; /* Membuat scroll terasa seperti slider/carousel yang patahnya rapi */
+}
+
+/* Kustomisasi Tampilan Scrollbar agar Estetik */
+.modules-wrapper::-webkit-scrollbar {
+    height: 8px; /* Tinggi scrollbar bawah */
+}
+.modules-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9; 
+    border-radius: 10px;
+}
+.modules-wrapper::-webkit-scrollbar-thumb {
+    background: var(--mint); 
+    border-radius: 10px;
+}
+.modules-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #059669; /* Warna hijau sedikit lebih gelap saat scrollbar disentuh */
+}
+
+/* KARTU MATERI */
+.module-card {
+    flex: 0 0 320px; /* Kunci 2: flex-grow 0, flex-shrink 0, lebar tetap 320px. Agar kartu tidak menciut. */
+    scroll-snap-align: start; /* Titik henti saat di-scroll */
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none; /* Menghilangkan garis bawah bawaan tag <a> */
+    color: inherit; /* Teks mengikuti warna parent */
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.module-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1);
+    border-color: var(--mint-light);
+}
+
+.module-image {
+    position: relative;
+    height: 180px;
+}
+
+.module-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Label kategori di atas gambar */
+.module-category {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--navy);
+    color: white;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.module-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Mendorong tombol 'Mulai Belajar' ke bagian paling bawah */
+}
+
+.module-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: var(--navy);
+}
+
+.module-content p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-bottom: 24px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.read-more {
+    color: var(--mint);
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: gap 0.3s;
+}
+
+/* Animasi panah bergerak saat kartu di-hover */
+.module-card:hover .read-more {
+    gap: 12px;
+}
+
+/* --- 8. ABOUT SECTION --- */
+.about {
+    padding: 100px 0;
+    background-color: #f8fafc; /* Warna latar abu-abu muda agar selang-seling dengan bagian materi */
+}
+
+.about-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 70px; /* Jarak antara teks dan gambar */
+}
+
+/* Kiri: Teks */
+.about-text {
+    flex: 1;
+}
+
+.lead-text {
+    font-size: 1.2rem;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.about-text p:not(.lead-text) {
+    color: var(--gray);
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+/* List dengan icon Checkmark */
+.about-features {
+    list-style: none;
+}
+
+.about-features li {
+    margin-bottom: 15px;
+    color: var(--navy);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.check-icon {
+    background: var(--mint-light);
+    color: #059669; /* Hijau tua agar kontras */
+    width: 26px;
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Kanan: Gambar */
+.about-image {
+    flex: 1;
+    position: relative; /* Penting sebagai patokan Badge melayang */
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 20px;
+    /* Memberikan efek bayangan kotak hijau ke arah berlawanan (kiri bawah) */
+    box-shadow: -20px 20px 0px var(--mint-light); 
+}
+
+/* Badge Melayang ala Web Profesional */
+.experience-badge {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    background: var(--navy);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+}
+
+.experience-badge h3 {
+    font-size: 2.2rem;
+    color: var(--mint);
+    margin-bottom: 5px;
+}
+
+.experience-badge p {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
+/* Responsive: Jika layar di HP/Tablet */
+@media (max-width: 992px) {
+    .about-wrapper {
+        flex-direction: column; /* Teks di atas, Gambar di bawah */
+    }
+    .about-image {
+        margin-top: 40px;
+        width: 90%; /* Agar tidak terlalu mepet tepi di HP */
+    }
+    .experience-badge {
+        right: 10px; /* Menyesuaikan posisi di HP */
+    }
+>>>>>>> 063ec696f3d0131be62247d9ca52cf1a36122b27
+}

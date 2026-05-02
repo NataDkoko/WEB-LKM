@@ -872,35 +872,27 @@ html {
     }
 }
 
-.hero-text .sub-title {
-    opacity: 0; /* Sembunyikan dulu di awal */
-    animation: fadeInUp 0.8s ease forwards;
+.hidden-animate {
+    opacity: 0; /* Transparan */
+    transform: translateY(40px); /* Agak ke bawah */
+    transition: opacity 0.8s ease, transform 0.8s ease; /* Transisi yang halus */
+    will-change: opacity, transform; /* Optimalisasi performa */
 }
 
-.hero-text h1 {
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.2s; /* Muncul belakangan sedikit */
+/* KEADAAN AKHIR: Saat elemen muncul di layar (dicuci oleh JS) */
+.show-animate {
+    opacity: 1; /* Muncul penuh */
+    transform: translateY(0); /* Posisi asli */
 }
 
-.hero-text p {
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.4s; 
-}
+/* Trik Staggered (Berurutan) untuk elemen yang berjejer (Grid/Flex) */
+/* Kartu ke-2 jeda sedikit */
+.show-animate:nth-child(2) { transition-delay: 0.15s; }
+/* Kartu ke-3 jeda lebih lama */
+.show-animate:nth-child(3) { transition-delay: 0.3s; }
+/* Kartu ke-4 jeda lebih lama lagi */
+.show-animate:nth-child(4) { transition-delay: 0.45s; }
 
-.hero-action {
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.6s;
-}
-
-/* Menerapkan Animasi ke Gambar (Kanan) */
-.hero-image-container {
-    opacity: 0;
-    animation: fadeInRight 1s ease forwards;
-    animation-delay: 0.3s; /* Gambar bergeser perlahan dari kanan */
-}
 
 .mentors-wrapper {
     display: flex;

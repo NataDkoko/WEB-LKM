@@ -901,3 +901,55 @@ html {
     animation: fadeInRight 1s ease forwards;
     animation-delay: 0.3s; /* Gambar bergeser perlahan dari kanan */
 }
+
+.mentors-wrapper {
+    display: flex;
+    justify-content: center; /* Memaksa 2 kartu berada persis di tengah */
+    gap: 40px; /* Jarak antar kartu mentor */
+    margin-bottom: 60px; /* Jarak ke bawah sebelum masuk ke bagian anggota */
+    flex-wrap: wrap; /* Agar responsif di layar HP */
+}
+
+/* Membedakan ukuran kartu mentor agar sedikit lebih besar/spesial */
+.mentor-card {
+    width: 350px; /* Sedikit lebih lebar dari kartu anggota biasa */
+    max-width: 100%;
+}
+
+.mentor-card img {
+    height: 300px; /* Fotonya sedikit lebih tinggi */
+}
+
+/* Judul pemisah antara Mentor dan Tim Pengembang */
+.team-divider {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.team-divider h3 {
+    font-size: 1.6rem;
+    color: var(--navy);
+    position: relative;
+    display: inline-block;
+}
+
+/* Garis estetik di bawah tulisan Tim Pengembang */
+.team-divider h3::after {
+    content: '';
+    display: block;
+    width: 50%;
+    height: 3px;
+    background: var(--mint);
+    margin: 8px auto 0;
+    border-radius: 2px;
+}
+
+/* Responsive untuk HP */
+@media (max-width: 768px) {
+    .mentors-wrapper {
+        gap: 20px;
+    }
+    .mentor-card {
+        width: 100%; /* Di HP, kartu mentor akan memenuhi layar seperti anggota */
+    }
+}

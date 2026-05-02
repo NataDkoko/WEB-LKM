@@ -1,3 +1,26 @@
+@keyframes fadeInUp {
+    0% {
+        opacity: 0; /* Mulai dari 100% transparan / tidak terlihat */
+        transform: translateY(40px); /* Posisi awal agak ke bawah 40px */
+    }
+    100% {
+        opacity: 1; /* Menjadi sepenuhnya terlihat */
+        transform: translateY(0); /* Kembali ke posisi asli */
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(40px); /* Posisi awal agak ke kanan */
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
 html {
     scroll-behavior: smooth;
 }
@@ -847,4 +870,34 @@ html {
     .experience-badge {
         right: 10px; /* Menyesuaikan posisi di HP */
     }
+}
+
+.hero-text .sub-title {
+    opacity: 0; /* Sembunyikan dulu di awal */
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.hero-text h1 {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.2s; /* Muncul belakangan sedikit */
+}
+
+.hero-text p {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.4s; 
+}
+
+.hero-action {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.6s;
+}
+
+/* Menerapkan Animasi ke Gambar (Kanan) */
+.hero-image-container {
+    opacity: 0;
+    animation: fadeInRight 1s ease forwards;
+    animation-delay: 0.3s; /* Gambar bergeser perlahan dari kanan */
 }

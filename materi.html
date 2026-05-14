@@ -1,580 +1,115 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modul Pembelajaran – Manajemen Aksi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --green-dark:   #1a6b4a;
-      --green-mid:    #22875e;
-      --green-light:  #2fa674;
-      --green-pale:   #e8f5ef;
-      --green-accent: #3ec98a;
-      --text-dark:    #1a2228;
-      --text-body:    #3d4f5a;
-      --text-muted:   #8fa3ae;
-      --bg:           #f2f4f6;
-      --sidebar-bg:   #ffffff;
-      --card-bg:      #ffffff;
-      --border:       #e2e8ed;
-      --progress-h:   4px;
-      --radius-sm:    6px;
-      --radius-md:    12px;
-      --radius-lg:    18px;
-      --shadow:       0 2px 16px rgba(0,0,0,.07);
-    }
-
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      font-family: 'DM Sans', sans-serif;
-      color: var(--text-dark);
-    }
-
-    /* ── SHELL ──────────────────────────────── */
-    .shell {
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ── SIDEBAR ────────────────────────────── */
-    .sidebar {
-      width: 280px;
-      flex-shrink: 0;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 28px 0 24px;
-      overflow-y: auto;
-    }
-
-    .sidebar-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      padding: 0 24px;
-      margin-bottom: 6px;
-    }
-
-    .sidebar-title {
-      font-family: 'Lora', serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-dark);
-      padding: 0 24px 20px;
-      line-height: 1.3;
-    }
-
-    /* progress */
-    .progress-wrap {
-      padding: 0 24px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .progress-header span {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-    .progress-header strong {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--green-mid);
-    }
-    .progress-bar {
-      width: 100%;
-      height: var(--progress-h);
-      background: var(--border);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      width: 20%;
-      background: linear-gradient(90deg, var(--green-mid), var(--green-accent));
-      border-radius: 99px;
-      transition: width .6s ease;
-    }
-
-    /* nav items */
-    .nav-list {
-      list-style: none;
-      padding: 14px 12px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 12px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: background .15s, color .15s;
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--text-body);
-    }
-    .nav-item:hover { background: var(--green-pale); }
-
-    .nav-item.active {
-      background: var(--green-pale);
-      color: var(--green-dark);
-      font-weight: 600;
-      border-left: 3px solid var(--green-mid);
-      padding-left: 9px;
-    }
-
-    .nav-item.done { color: var(--green-dark); }
-
-    .nav-icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .nav-icon.done-icon {
-      background: var(--green-mid);
-      color: #fff;
-    }
-
-    .nav-icon.active-icon {
-      background: var(--green-mid);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .nav-icon.pending-icon {
-      background: var(--border);
-      color: var(--text-muted);
-      font-size: 12px;
-    }
-
-    /* ── MAIN ───────────────────────────────── */
-    .main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 32px 40px 80px;
-      scroll-behavior: smooth;
-    }
-
-    /* hero card */
-    .hero-card {
-      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 55%, var(--green-light) 100%);
-      border-radius: var(--radius-lg);
-      padding: 40px 48px;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 0;
-    }
-
-    .hero-card::before,
-    .hero-card::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      opacity: .18;
-      background: #fff;
-    }
-    .hero-card::before {
-      width: 260px; height: 260px;
-      top: -60px; right: 60px;
-    }
-    .hero-card::after {
-      width: 160px; height: 160px;
-      top: 40px; right: 180px;
-    }
-
-    .hero-bagian {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.65);
-      margin-bottom: 10px;
-    }
-
-    .hero-title {
-      font-family: 'Lora', serif;
-      font-size: 34px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.2;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* meta row */
-    .meta-row {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-top: none;
-      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-      padding: 22px 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-      box-shadow: var(--shadow);
-    }
-
-    .meta-desc {
-      font-size: 14.5px;
-      line-height: 1.7;
-      color: var(--text-body);
-      max-width: 560px;
-    }
-
-    .meta-tags {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: flex-end;
-    }
-
-    .tag-item {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .tag-item::before {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--green-accent);
-      flex-shrink: 0;
-    }
-
-    /* content card */
-    .content-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 40px 48px;
-      box-shadow: var(--shadow);
-      margin-bottom: 24px;
-      animation: fadeUp .4s ease both;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .section-eyebrow {
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--green-mid);
-      margin-bottom: 10px;
-    }
-
-    .section-heading {
-      font-family: 'Lora', serif;
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 20px;
-      line-height: 1.35;
-    }
-
-    .section-body {
-      font-size: 15px;
-      line-height: 1.85;
-      color: var(--text-body);
-      margin-bottom: 16px;
-    }
-    .section-body:last-child { margin-bottom: 0; }
-
-    /* highlight box */
-    .highlight-box {
-      background: var(--green-pale);
-      border-left: 3px solid var(--green-mid);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      padding: 16px 20px;
-      margin: 24px 0;
-      font-size: 14.5px;
-      color: var(--green-dark);
-      line-height: 1.7;
-      font-style: italic;
-    }
-
-    /* divider */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 28px 0;
-    }
-
-    /* key points */
-    .key-points {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .kp-item {
-      background: var(--bg);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      border: 1px solid var(--border);
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .kp-item:hover {
-      border-color: var(--green-accent);
-      box-shadow: 0 4px 16px rgba(34,135,94,.1);
-    }
-
-    .kp-icon {
-      width: 36px; height: 36px;
-      border-radius: var(--radius-sm);
-      background: var(--green-pale);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .kp-text strong {
-      display: block;
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 4px;
-    }
-    .kp-text span {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-
-
-    /* ── SCROLLBAR ──────────────────────────── */
-    .main::-webkit-scrollbar,
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .main::-webkit-scrollbar-track,
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .main::-webkit-scrollbar-thumb,
-    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-
-    /* check svg */
-    .check-svg { width: 13px; height: 13px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi - Manajemen Aksi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="materi.css">
 </head>
-<body>
+<body class="bg-gray">
 
-<div class="shell">
+    <main class="materi-layout container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="badge">MODUL PEMBELAJARAN</span>
+                <h2>Manajemen Aksi</h2>
+            </div>
+            
+            <div class="sidebar-progress">
+                <div class="progress-text">
+                    <span>Progress Materi</span>
+                    <span>1/5 selesai</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 20%;"></div>
+                </div>
+            </div>
 
-  <!-- ── SIDEBAR ── -->
-  <aside class="sidebar">
-    <p class="sidebar-label">Modul Pembelajaran</p>
-    <h1 class="sidebar-title">Manajemen Aksi</h1>
+            <ul class="nav-parts">
+    <li>
+        <a href="#part1">
+            <span class="icon">1</span>
+            Pengertian Manajemen Aksi
+        </a>
+    </li>
+    
+    <li>
+        <a href="#part2">
+            <span class="icon">2</span>
+            Perencanaan Aksi
+        </a>
+    </li>
+    
+    <li>
+        <a href="#part3">
+            <span class="icon">3</span>
+            Pelaksanaan Aksi
+        </a>
+    </li>
+    
+    <li>
+        <a href="#part4">
+            <span class="icon">4</span>
+            Evaluasi & Refleksi
+        </a>
+    </li>
+    
+    <li>
+        <a href="#part5">
+            <span class="icon">5</span>
+            Kesimpulan Modul
+        </a>
+    </li>
+</ul>
+        </aside>
 
-    <div class="progress-wrap">
-      <div class="progress-header">
-        <span>Progress belajar</span>
-        <strong id="progress-label">1 / 5 selesai</strong>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
-    </div>
+        <article class="content-area">
+            
+            <section id="part1" class="materi-section">
+                </section>
 
-    <ul class="nav-list" id="nav-list">
-      <li class="nav-item done" data-index="0">
-        <span class="nav-icon done-icon">
-          <svg class="check-svg" viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg>
-        </span>
-        Pengertian Manajemen Aksi
-      </li>
-      <li class="nav-item active" data-index="1">
-        <span class="nav-icon active-icon">2</span>
-        Perencanaan Aksi
-      </li>
-      <li class="nav-item" data-index="2">
-        <span class="nav-icon pending-icon">3</span>
-        Pelaksanaan Aksi
-      </li>
-      <li class="nav-item" data-index="3">
-        <span class="nav-icon pending-icon">4</span>
-        Evaluasi &amp; Refleksi
-      </li>
-      <li class="nav-item" data-index="4">
-        <span class="nav-icon pending-icon">5</span>
-        Kesimpulan Modul
-      </li>
-    </ul>
-  </aside>
+            <section id="part2" class="materi-section">
+                
+                <div class="materi-header-card">
+                    <span class="part-label">BAGIAN 2 DARI 5</span>
+                    <h1 class="serif-title">Perencanaan Aksi</h1>
+                </div>
 
-  <!-- ── MAIN ── -->
-  <main class="main" id="main-content">
+                <div class="materi-info-card">
+                    <p class="lead-desc">Perencanaan adalah fondasi dari setiap aksi yang sukses. Pelajari bagaimana menyusun rencana yang terstruktur, realistis, dan dapat dijalankan secara efektif.</p>
+                </div>
 
-    <!-- Hero -->
-    <div class="hero-card">
-      <p class="hero-bagian">Bagian 2 dari 5</p>
-      <h2 class="hero-title">Perencanaan Aksi</h2>
-    </div>
+                <div class="materi-article-card">
+                    <span class="subtitle">PENGANTAR</span>
+                    <h2 class="serif-title">Mengapa Perencanaan Itu Penting?</h2>
+                    
+                    <p>Sebuah aksi tanpa perencanaan ibarat berlayar tanpa kompas — bisa jadi kita bergerak, tetapi tidak tentu ke arah yang benar. Perencanaan aksi bukan sekadar formalitas, melainkan sebuah proses berpikir yang memastikan setiap langkah yang diambil memiliki tujuan yang jelas dan terukur.</p>
+                    
+                    <p>Dalam konteks manajemen aksi, perencanaan mencakup penetapan tujuan, pembagian peran, penyusunan jadwal, dan identifikasi risiko. Semua elemen ini bekerja bersama untuk menciptakan...</p>
+                </div>
 
-    <!-- Meta row -->
-    <div class="meta-row">
-      <p class="meta-desc">
-        Perencanaan adalah fondasi dari setiap aksi yang sukses. Pelajari
-        bagaimana menyusun rencana yang terstruktur, realistis, dan dapat
-        dijalankan secara efektif.
-      </p>
-      <div class="meta-tags">
-        <span class="tag-item">30 menit membaca</span>
-        <span class="tag-item">Kelompok 5</span>
-        <span class="tag-item">Semua level</span>
-      </div>
-    </div>
+            </section>
 
-    <!-- Content -->
-    <div class="content-card">
-      <p class="section-eyebrow">Pengantar</p>
-      <h3 class="section-heading">Mengapa Perencanaan Itu Penting?</h3>
+            <section id="part3" class="materi-section">
+                <div class="materi-article-card" style="min-height: 500px;">
+                    <h2 class="serif-title">Pelaksanaan Aksi (Contoh)</h2>
+                    <p>Isi materi bagian 3 ditaruh di sini...</p>
+                </div>
+            </section>
 
-      <p class="section-body">
-        Sebuah aksi tanpa perencanaan ibarat berlayar tanpa kompas — bisa jadi kita bergerak,
-        tetapi tidak tentu ke arah yang benar. Perencanaan aksi bukan sekadar formalitas,
-        melainkan sebuah proses berpikir yang memastikan setiap langkah yang diambil memiliki
-        tujuan yang jelas dan terukur.
-      </p>
+            <section id="part4" class="materi-section">
+                <div class="materi-article-card" style="min-height: 500px;">
+                    <h2 class="serif-title">Evaluasi & Refleksi (Contoh)</h2>
+                    <p>Isi materi bagian 4 ditaruh di sini...</p>
+                </div>
+            </section>
 
-      <div class="highlight-box">
-        "Perencanaan yang baik adalah separuh dari keberhasilan." — Prinsip Manajemen Modern
-      </div>
+        </article>
 
-      <p class="section-body">
-        Dalam konteks manajemen aksi, perencanaan mencakup penetapan tujuan, pembagian peran,
-        penyusunan jadwal, dan identifikasi risiko. Semua elemen ini bekerja bersama untuk
-        menciptakan kerangka kerja yang solid sebelum aksi dimulai.
-      </p>
-
-      <div class="divider"></div>
-
-      <p class="section-eyebrow">Komponen Utama</p>
-      <h3 class="section-heading">Elemen dalam Perencanaan Aksi</h3>
-
-      <div class="key-points">
-        <div class="kp-item">
-          <div class="kp-icon">🎯</div>
-          <div class="kp-text">
-            <strong>Penetapan Tujuan</strong>
-            <span>Tujuan yang spesifik, terukur, dan realistis sebagai arah utama aksi.</span>
-          </div>
-        </div>
-        <div class="kp-item">
-          <div class="kp-icon">👥</div>
-          <div class="kp-text">
-            <strong>Pembagian Peran</strong>
-            <span>Setiap anggota memiliki tanggung jawab yang jelas sesuai kompetensinya.</span>
-          </div>
-        </div>
-        <div class="kp-item">
-          <div class="kp-icon">📅</div>
-          <div class="kp-text">
-            <strong>Penyusunan Jadwal</strong>
-            <span>Timeline yang realistis membantu menjaga ritme dan konsistensi kerja.</span>
-          </div>
-        </div>
-        <div class="kp-item">
-          <div class="kp-icon">⚠️</div>
-          <div class="kp-text">
-            <strong>Identifikasi Risiko</strong>
-            <span>Antisipasi hambatan sejak awal agar tidak mengganggu jalannya aksi.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-
-
-<script>
-  // Nav item click → switch active
-  const navItems = document.querySelectorAll('.nav-item');
-  const titles = [
-    'Pengertian Manajemen Aksi',
-    'Perencanaan Aksi',
-    'Pelaksanaan Aksi',
-    'Evaluasi & Refleksi',
-    'Kesimpulan Modul'
-  ];
-  const bagians = ['Bagian 1 dari 5','Bagian 2 dari 5','Bagian 3 dari 5','Bagian 4 dari 5','Bagian 5 dari 5'];
-
-  let activeIndex = 1;
-
-  navItems.forEach((item, i) => {
-    item.addEventListener('click', () => {
-      if (i <= activeIndex) return; // only allow going forward from current
-      setActive(i);
-    });
-  });
-
-  function setActive(idx) {
-    activeIndex = idx;
-    navItems.forEach((item, i) => {
-      item.classList.remove('active','done');
-      const icon = item.querySelector('.nav-icon');
-      icon.className = 'nav-icon';
-      if (i < idx) {
-        item.classList.add('done');
-        icon.classList.add('done-icon');
-        icon.innerHTML = `<svg class="check-svg" viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg>`;
-      } else if (i === idx) {
-        item.classList.add('active');
-        icon.classList.add('active-icon');
-        icon.textContent = i + 1;
-      } else {
-        icon.classList.add('pending-icon');
-        icon.textContent = i + 1;
-      }
-    });
-    // update progress
-    const done = idx; // items before active are done
-    document.getElementById('progress-label').textContent = `${done} / 5 selesai`;
-    document.getElementById('progress-fill').style.width = `${(done / 5) * 100}%`;
-    // update hero
-    document.querySelector('.hero-bagian').textContent = bagians[idx];
-    document.querySelector('.hero-title').textContent = titles[idx];
-    document.getElementById('main-content').scrollTop = 0;
-  }
-
-
-</script>
+    </main>
+    <script src="script.js"></script>
+</body>
 </body>
 </html>

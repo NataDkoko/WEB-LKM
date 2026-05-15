@@ -129,3 +129,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+// =========================================
+// FITUR TRANSISI PINDAH HALAMAN
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    // Ambil semua elemen link (tag <a>) di dalam halaman
+    const allLinks = document.querySelectorAll('a');
+
+    allLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetUrl = this.getAttribute('href');
+
+            // PENTING: Kita hanya mencegat link yang pindah halaman.
+            // Link anchor (yang diawali dengan '#') seperti #part1, #about tidak boleh dicegat
+            // karena itu hanya scroll di halaman yang sama.
+            if (targetUrl && !targetUrl.startsWith('#') && targetUrl !== '') {
+                
+                // 1. Tahan dulu perpindahan halamannya
+                e.preventDefault(); 
+                
+                // 2. Tambahkan class 'page-leaving' ke <body> untuk memicu animasi Fade Out
+                document.body.classList.add('page-leaving');
+
+                // 3. Tunggu 400 milidetik (sesuai durasi transisi di CSS), lalu pindah halaman
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 400); 
+            }
+        });
+    });
+});

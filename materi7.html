@@ -6,6 +6,7 @@
   <title>Pembangunan & Pengembangan Organisasi – Modul Pembelajaran</title>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="materi.css">
+  <link rel="stylesheet" href="style.css">
 </head>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -141,9 +142,11 @@
     <div class="progress-wrap">
       <div class="progress-header">
         <span>Progress Materi</span>
-        <strong>1/6 selesai</strong>
+        <strong>1/5 selesai</strong>
       </div>
-      <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
     </div>
 
     <ul class="nav-list">
@@ -345,21 +348,6 @@
   </main>
 </div>
 
-<script>
-  const sections = document.querySelectorAll('.content-card[id]');
-  const navItems = document.querySelectorAll('.nav-item');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        navItems.forEach(item => {
-          const link = item.querySelector('a');
-          item.classList.toggle('active', link && link.getAttribute('href') === '#' + id);
-        });
-      }
-    });
-  }, { threshold: 0.35 });
-  sections.forEach(s => observer.observe(s));
-</script>
+<script src="script.js"></script>
 </body>
 </html>

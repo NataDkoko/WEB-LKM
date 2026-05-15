@@ -9,23 +9,39 @@
 }
 
 /* Layout Utama: 2 Kolom */
+/* Pastikan Container Utama memiliki align-items: flex-start */
 .materi-layout {
     display: flex;
-    align-items: flex-start; /* Penting agar sidebar tidak memanjang ke bawah mengikuti konten */
+    align-items: flex-start; /* INI WAJIB ADA: Mencegah sidebar meregang sampai ke bawah konten */
     gap: 30px;
     padding: 40px 20px;
     max-width: 1100px;
+    margin: 0 auto; /* Menengahkan layout */
 }
 
-/* --- KOLOM KIRI: SIDEBAR NAVIGASI --- */
+/* Update Kolom Kiri: Sidebar */
 .sidebar {
-    flex: 0 0 300px; /* Lebar fixed 300px, tidak membesar/mengecil */
+    flex: 0 0 300px;
     background: #ffffff;
     border-radius: 12px;
     border: 1px solid #e2e8f0;
-    overflow: hidden;
-    position: sticky; /* KUNCI UTAMA: Membuatnya menempel saat di-scroll */
-    top: 30px; /* Jarak tempel dari atas layar */
+    
+    /* --- KUNCI UTAMANYA DI SINI --- */
+    position: sticky; 
+    top: 30px; /* Jarak nempel dari atas layar */
+    
+    /* Tambahan agar sidebar yang kepanjangan tetap aman */
+    max-height: calc(100vh - 60px); /* Tinggi maksimal sebesar layar dikurangi jarak atas-bawah */
+    overflow-y: auto; /* Jika isi sidebar lebih panjang dari layar, akan muncul scroll khusus di dalam sidebar */
+}
+
+/* (Opsional) Mempercantik bentuk scrollbar di dalam sidebar agar lebih tipis */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
 }
 
 .sidebar-header {

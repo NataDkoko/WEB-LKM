@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Otoritas Informasi – Modul Pembelajaran</title>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="materi.css">
+  <link rel="stylesheet" href="style.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -326,20 +328,26 @@
 
   <!-- ── SIDEBAR ── -->
   <aside class="sidebar">
-    <p class="sidebar-label">Modul Pembelajaran</p>
-    <h1 class="sidebar-title">Otoritas Informasi</h1>
+     <a href="index.html" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Kembali ke Beranda
+            </a>
+            <div class="sidebar-header">
+                <span class="badge">MODUL PEMBELAJARAN</span>
+                <h2>Otoritas Informasi</h2>
+            </div>
+            
+            <div class="sidebar-progress">
+                <div class="progress-text">
+                    <span>Progress belajar</span>
+                    <span id="progress-text">1/8 selesai</span>
+                </div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+             </div>
+        </div>
 
-    <div class="progress-wrap">
-      <div class="progress-header">
-        <span>Progress Materi</span>
-        <strong>1/12 selesai</strong>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill"></div>
-      </div>
-    </div>
-
-    <ul class="nav-list">
+    <ul class="nav-parts">
       <li class="nav-item active"><a href="#part1"><span class="nav-icon">1</span>Identitas Otoritas Informasi</a></li>
       <li class="nav-item"><a href="#part2"><span class="nav-icon">2</span>Fondasi Otoritas Informasi</a></li>
       <li class="nav-item"><a href="#part3"><span class="nav-icon">3</span>Informatika Arsitektur Hukum</a></li>
@@ -513,25 +521,7 @@
 
   </main>
 </div>
-
-<script>
-  // Highlight active nav on scroll
-  const sections = document.querySelectorAll('.content-card[id]');
-  const navItems = document.querySelectorAll('.nav-item');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        navItems.forEach(item => {
-          const link = item.querySelector('a');
-          item.classList.toggle('active', link && link.getAttribute('href') === '#' + id);
-        });
-      }
-    });
-  }, { threshold: 0.4 });
-
-  sections.forEach(s => observer.observe(s));
-</script>
+<script src="script.js"></script>
+</body>
 </body>
 </html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analisa Organisasi – Modul Pembelajaran</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #1a6b4a;
+      --green-mid:    #22875e;
+      --green-light:  #2fa674;
+      --green-pale:   #e8f5ef;
+      --green-accent: #3ec98a;
+      --text-dark:    #1a2228;
+      --text-body:    #3d4f5a;
+      --text-muted:   #8fa3ae;
+      --bg:           #f2f4f6;
+      --sidebar-bg:   #ffffff;
+      --card-bg:      #ffffff;
+      --border:       #e2e8ed;
+      --radius-sm:    6px;
+      --radius-md:    12px;
+      --radius-lg:    18px;
+      --shadow:       0 2px 16px rgba(0,0,0,.07);
+    }
+
+    html, body { height: 100%; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text-dark); }
+    .shell { display: flex; height: 100vh; overflow: hidden; }
+
+    /* SIDEBAR */
+    .sidebar { width: 290px; flex-shrink: 0; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 28px 0 24px; overflow-y: auto; }
+    .sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); padding: 0 24px; margin-bottom: 6px; }
+    .sidebar-title { font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: var(--text-dark); padding: 0 24px 20px; line-height: 1.35; }
+
+    .progress-wrap { padding: 0 24px 20px; border-bottom: 1px solid var(--border); }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .progress-header span { font-size: 12px; color: var(--text-muted); }
+    .progress-header strong { font-size: 12px; font-weight: 600; color: var(--green-mid); }
+    .progress-bar { width: 100%; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 20%; background: linear-gradient(90deg, var(--green-mid), var(--green-accent)); border-radius: 99px; }
+
+    .nav-list { list-style: none; padding: 14px 12px 0; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 400; color: var(--text-body); text-decoration: none; transition: background .15s; }
+    .nav-item a:hover { background: var(--green-pale); color: var(--green-dark); }
+    .nav-item.active a { background: var(--green-pale); color: var(--green-dark); font-weight: 600; border-left: 3px solid var(--green-mid); padding-left: 9px; }
+    .nav-icon { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--border); color: var(--text-muted); }
+    .nav-item.active .nav-icon { background: var(--green-mid); color: #fff; }
+
+    /* MAIN */
+    .main { flex: 1; overflow-y: auto; padding: 32px 40px 80px; scroll-behavior: smooth; }
+
+    /* Hero */
+    .hero-card { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 55%, var(--green-light) 100%); border-radius: var(--radius-lg); padding: 40px 48px; position: relative; overflow: hidden; }
+    .hero-card::before, .hero-card::after { content: ''; position: absolute; border-radius: 50%; opacity: .18; background: #fff; }
+    .hero-card::before { width: 260px; height: 260px; top: -60px; right: 60px; }
+    .hero-card::after  { width: 160px; height: 160px; top: 40px; right: 180px; }
+    .hero-bagian { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 10px; }
+    .hero-title { font-family: 'Lora', serif; font-size: 34px; font-weight: 700; color: #fff; line-height: 1.2; position: relative; z-index: 1; }
+
+    .meta-row { background: var(--card-bg); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px 48px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; box-shadow: var(--shadow); }
+    .meta-desc { font-size: 14px; line-height: 1.7; color: var(--text-body); max-width: 560px; }
+    .meta-tags { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .tag-item { font-size: 12.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .tag-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green-accent); flex-shrink: 0; }
+
+    /* Content */
+    .content-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px 48px; box-shadow: var(--shadow); margin-bottom: 24px; scroll-margin-top: 32px; animation: fadeUp .35s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--green-mid); margin-bottom: 10px; }
+    .section-heading { font-family: 'Lora', serif; font-size: 24px; font-weight: 700; color: var(--text-dark); margin-bottom: 18px; line-height: 1.35; }
+    .section-body { font-size: 15px; line-height: 1.85; color: var(--text-body); margin-bottom: 14px; }
+    .section-body:last-child { margin-bottom: 0; }
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    .highlight-box { background: var(--green-pale); border-left: 3px solid var(--green-mid); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 20px 0; font-size: 14.5px; color: var(--green-dark); line-height: 1.7; font-style: italic; }
+
+    /* Bullet & Ordered */
+    .bullet-list { list-style: none; margin: 12px 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+    .bullet-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; color: var(--text-body); line-height: 1.7; }
+    .bullet-list li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green-accent); flex-shrink: 0; margin-top: 8px; }
+    .bullet-list li strong { color: var(--text-dark); }
+
+    /* Tujuan grid */
+    .tujuan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 18px; }
+    .tujuan-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; transition: border-color .2s; }
+    .tujuan-card:hover { border-color: var(--green-accent); box-shadow: 0 4px 16px rgba(34,135,94,.1); }
+    .tujuan-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--green-pale); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .tujuan-text strong { display: block; font-size: 13.5px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+    .tujuan-text span { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Ruang lingkup cards */
+    .ruang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+    .ruang-card { border-radius: var(--radius-md); padding: 20px 18px; border: 1px solid var(--border); }
+    .ruang-card .r-icon { font-size: 24px; margin-bottom: 10px; }
+    .ruang-card .r-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+    .ruang-card p { font-size: 13px; color: var(--text-body); line-height: 1.6; }
+    .ruang-card.internal { background: #f0fdf4; border-color: #bbf7d0; } .ruang-card.internal .r-label { color: #15803d; }
+    .ruang-card.eksternal { background: #eff6ff; border-color: #bfdbfe; } .ruang-card.eksternal .r-label { color: #1d4ed8; }
+    .ruang-card.hubungan  { background: #fdf4ff; border-color: #e9d5ff; } .ruang-card.hubungan  .r-label { color: #7e22ce; }
+
+    /* Prinsip cards */
+    .prinsip-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 12px; margin-top: 18px; }
+    .prinsip-row { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 20px; display: flex; gap: 16px; align-items: flex-start; transition: border-color .2s; }
+    .prinsip-row:hover { border-color: var(--green-accent); }
+    .prinsip-badge { min-width: 90px; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; text-align: center; letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0; margin-top: 2px; }
+    .badge-ilmiah   { background: #dcfce7; color: #15803d; }
+    .badge-rasional { background: #dbeafe; color: #1d4ed8; }
+    .badge-objektif { background: #fef9c3; color: #854d0e; }
+    .badge-kritis   { background: #fce7f3; color: #9d174d; }
+    .badge-empiris  { background: #ede9fe; color: #6d28d9; }
+    .prinsip-row p  { font-size: 13.5px; color: var(--text-body); line-height: 1.7; }
+
+    /* Metode grid */
+    .metode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px; }
+    .metode-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; transition: border-color .2s; }
+    .metode-card:hover { border-color: var(--green-accent); }
+    .metode-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .metode-card strong { display: block; font-size: 13.5px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+    .metode-card span { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Problem solving steps */
+    .steps-list { display: flex; flex-direction: column; gap: 0; margin-top: 20px; position: relative; }
+    .steps-list::before { content: ''; position: absolute; left: 19px; top: 20px; bottom: 20px; width: 2px; background: var(--border); z-index: 0; }
+    .step-item { display: flex; gap: 16px; align-items: flex-start; position: relative; z-index: 1; padding-bottom: 20px; }
+    .step-item:last-child { padding-bottom: 0; }
+    .step-num { width: 38px; height: 38px; border-radius: 50%; background: var(--green-mid); color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 0 4px var(--green-pale); }
+    .step-body { padding-top: 6px; }
+    .step-body strong { display: block; font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+    .step-body p { font-size: 13.5px; color: var(--text-body); line-height: 1.7; }
+
+    /* scrollbar */
+    .main::-webkit-scrollbar, .sidebar::-webkit-scrollbar { width: 4px; }
+    .main::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <p class="sidebar-label">Modul Pembelajaran</p>
+    <h1 class="sidebar-title">Analisa Organisasi</h1>
+
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span>Progress Materi</span>
+        <strong>1/5 selesai</strong>
+      </div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active"><a href="#part1"><span class="nav-icon">1</span>Pengertian Analisa Organisasi</a></li>
+      <li class="nav-item"><a href="#part2"><span class="nav-icon">2</span>Ruang Lingkup</a></li>
+      <li class="nav-item"><a href="#part3"><span class="nav-icon">3</span>Prinsip yang Harus Dijaga</a></li>
+      <li class="nav-item"><a href="#part4"><span class="nav-icon">4</span>Metode & Alat Analisa</a></li>
+      <li class="nav-item"><a href="#part5"><span class="nav-icon">5</span>Problem Solving: Urutan Berpikir</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Hero -->
+    <div class="hero-card">
+      <p class="hero-bagian">Materi Utama</p>
+      <h2 class="hero-title">Analisa Organisasi</h2>
+    </div>
+
+    <!-- Meta row -->
+    <div class="meta-row">
+      <p class="meta-desc">
+        Proses memahami kondisi organisasi untuk menemukan masalah, potensi,
+        dan arah perbaikan guna mendukung pengambilan keputusan yang lebih tepat.
+      </p>
+      <div class="meta-tags">
+        <span class="tag-item">Pemateri: A Fauzan Alvin Mubarok</span>
+        <span class="tag-item">Manajemen Organisasi</span>
+        <span class="tag-item">Semua Level</span>
+      </div>
+    </div>
+
+    <!-- 1. Pengertian -->
+    <div class="content-card" id="part1">
+      <p class="section-eyebrow">Bagian 1 — Pengantar</p>
+      <h3 class="section-heading">Apa itu Analisa Organisasi?</h3>
+      <p class="section-body">
+        <strong>Analisa Organisasi</strong> adalah proses memahami kondisi organisasi untuk menemukan masalah,
+        potensi, dan arah perbaikan secara sistematis dan terencana.
+      </p>
+
+      <div class="tujuan-grid">
+        <div class="tujuan-card">
+          <div class="tujuan-icon">🔎</div>
+          <div class="tujuan-text">
+            <strong>Mengetahui Kondisi Nyata</strong>
+            <span>Memahami keadaan organisasi secara objektif berdasarkan data lapangan.</span>
+          </div>
+        </div>
+        <div class="tujuan-card">
+          <div class="tujuan-icon">🌱</div>
+          <div class="tujuan-text">
+            <strong>Identifikasi Akar Masalah</strong>
+            <span>Menemukan penyebab utama permasalahan, bukan hanya gejalanya.</span>
+          </div>
+        </div>
+        <div class="tujuan-card">
+          <div class="tujuan-icon">⚖️</div>
+          <div class="tujuan-text">
+            <strong>Dukung Keputusan Tepat</strong>
+            <span>Menjadi landasan bagi pemimpin dalam mengambil keputusan yang berbasis fakta.</span>
+          </div>
+        </div>
+        <div class="tujuan-card">
+          <div class="tujuan-icon">📐</div>
+          <div class="tujuan-text">
+            <strong>Dasar Perbaikan Strategi</strong>
+            <span>Hasil analisa digunakan sebagai pijakan untuk merancang strategi yang lebih baik.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Ruang Lingkup -->
+    <div class="content-card" id="part2">
+      <p class="section-eyebrow">Bagian 2</p>
+      <h3 class="section-heading">Ruang Lingkup Analisa</h3>
+      <p class="section-body">Analisa organisasi mencakup tiga dimensi yang saling berkaitan:</p>
+
+      <div class="ruang-grid">
+        <div class="ruang-card internal">
+          <div class="r-icon">🏛️</div>
+          <div class="r-label">Internal</div>
+          <p>Struktur organisasi, sumber daya manusia, budaya kerja, dan pola komunikasi yang berlangsung di dalam organisasi.</p>
+        </div>
+        <div class="ruang-card eksternal">
+          <div class="r-icon">🌐</div>
+          <div class="r-label">Eksternal</div>
+          <p>Peluang, tantangan, aturan yang berlaku, serta kebutuhan dan tekanan dari lingkungan luar organisasi.</p>
+        </div>
+        <div class="ruang-card hubungan">
+          <div class="r-icon">🔗</div>
+          <div class="r-label">Hubungan Keduanya</div>
+          <p>Faktor luar turut memengaruhi gerak dan keputusan organisasi — keduanya tidak bisa dipisahkan dalam analisa yang komprehensif.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Prinsip -->
+    <div class="content-card" id="part3">
+      <p class="section-eyebrow">Bagian 3</p>
+      <h3 class="section-heading">Prinsip yang Harus Dijaga</h3>
+      <p class="section-body">Lima prinsip dasar yang memastikan analisa organisasi menghasilkan kesimpulan yang valid dan dapat dipercaya:</p>
+
+      <div class="prinsip-grid">
+        <div class="prinsip-row">
+          <span class="prinsip-badge badge-ilmiah">Ilmiah</span>
+          <p>Analisis dilakukan berdasarkan metode ilmiah — sistematis, terencana, dan mengikuti langkah-langkah yang dapat diuji. Kesimpulan harus bisa dijelaskan dengan logika dan metode yang benar, bukan asumsi pribadi.</p>
+        </div>
+        <div class="prinsip-row">
+          <span class="prinsip-badge badge-rasional">Rasional</span>
+          <p>Setiap analisis harus menggunakan akal sehat dan logika. Hubungan sebab-akibat dalam organisasi harus masuk akal dan tidak bertentangan dengan kenyataan yang dapat dipahami.</p>
+        </div>
+        <div class="prinsip-row">
+          <span class="prinsip-badge badge-objektif">Objektif</span>
+          <p>Analisis harus bebas dari kepentingan pribadi, emosi, atau bias. Data dan fakta harus lebih diutamakan daripada opini, sehingga hasilnya netral dan adil.</p>
+        </div>
+        <div class="prinsip-row">
+          <span class="prinsip-badge badge-kritis">Kritis</span>
+          <p>Tidak menerima informasi begitu saja, tetapi harus dianalisis, dipertanyakan, dan diuji kebenarannya. Peneliti harus mampu melihat kelebihan, kekurangan, serta kemungkinan kesalahan dalam suatu data atau teori.</p>
+        </div>
+        <div class="prinsip-row">
+          <span class="prinsip-badge badge-empiris">Empiris-Teoritis</span>
+          <p><strong>Empiris</strong> berarti berdasarkan data nyata atau pengalaman lapangan. <strong>Teoritis</strong> berarti menggunakan teori yang sudah ada sebagai dasar analisis. Keduanya harus digabungkan: teori menjelaskan data, dan data membuktikan teori.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Metode & Alat -->
+    <div class="content-card" id="part4">
+      <p class="section-eyebrow">Bagian 4</p>
+      <h3 class="section-heading">Metode &amp; Alat Analisa</h3>
+      <p class="section-body">Berbagai metode digunakan agar analisa menghasilkan gambaran yang menyeluruh dan akurat:</p>
+
+      <div class="metode-grid">
+        <div class="metode-card">
+          <div class="metode-icon">👁️</div>
+          <div>
+            <strong>Observasi</strong>
+            <span>Mengamati aktivitas, pola komunikasi, dan dinamika kerja organisasi secara langsung di lapangan.</span>
+          </div>
+        </div>
+        <div class="metode-card">
+          <div class="metode-icon">🎙️</div>
+          <div>
+            <strong>Wawancara / Diskusi</strong>
+            <span>Menangkap pengalaman, hambatan, dan kebutuhan anggota melalui percakapan mendalam.</span>
+          </div>
+        </div>
+        <div class="metode-card">
+          <div class="metode-icon">📄</div>
+          <div>
+            <strong>Studi Dokumen</strong>
+            <span>Menelaah aturan, program kerja, laporan, dan evaluasi sebelumnya untuk memahami rekam jejak organisasi.</span>
+          </div>
+        </div>
+        <div class="metode-card">
+          <div class="metode-icon">📊</div>
+          <div>
+            <strong>Analisis SWOT</strong>
+            <span>Mengklasifikasikan temuan menjadi Masalah, Potensi, Peluang, dan Risiko secara terstruktur.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:24px;">
+        Kombinasi metode yang tepat menghasilkan gambaran organisasi yang lebih utuh — tidak ada satu metode
+        yang cukup berdiri sendiri.
+      </div>
+    </div>
+
+    <!-- 5. Problem Solving -->
+    <div class="content-card" id="part5">
+      <p class="section-eyebrow">Bagian 5</p>
+      <h3 class="section-heading">Problem Solving: Urutan Berpikir</h3>
+      <p class="section-body">Lima langkah sistematis yang memandu proses penyelesaian masalah dalam organisasi:</p>
+
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Temukan Fakta Utama</strong>
+            <p>Identifikasi informasi penting yang benar-benar terjadi di lapangan. Fokus pada data dan kondisi nyata, bukan asumsi.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Cari Akar Masalah</strong>
+            <p>Analisis penyebab utama dari masalah, bukan hanya gejalanya, agar solusi yang dibuat tepat sasaran.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Nilai Dampak</strong>
+            <p>Menilai akibat yang ditimbulkan dari masalah tersebut, baik jangka pendek maupun jangka panjang.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Susun Alternatif Solusi</strong>
+            <p>Buat beberapa pilihan solusi yang mungkin dilakukan untuk menyelesaikan masalah secara efektif.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <strong>Tentukan Tindak Lanjut</strong>
+            <p>Pilih solusi terbaik lalu susun langkah pelaksanaan secara konkret agar masalah bisa diselesaikan dengan terukur.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.content-card[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          const link = item.querySelector('a');
+          item.classList.toggle('active', link && link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

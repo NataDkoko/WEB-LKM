@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retorika – Modul Pembelajaran</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #1a6b4a;
+      --green-mid:    #22875e;
+      --green-light:  #2fa674;
+      --green-pale:   #e8f5ef;
+      --green-accent: #3ec98a;
+      --text-dark:    #1a2228;
+      --text-body:    #3d4f5a;
+      --text-muted:   #8fa3ae;
+      --bg:           #f2f4f6;
+      --sidebar-bg:   #ffffff;
+      --card-bg:      #ffffff;
+      --border:       #e2e8ed;
+      --radius-sm:    6px;
+      --radius-md:    12px;
+      --radius-lg:    18px;
+      --shadow:       0 2px 16px rgba(0,0,0,.07);
+    }
+
+    html, body { height: 100%; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text-dark); }
+
+    .shell { display: flex; height: 100vh; overflow: hidden; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 290px; flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      padding: 28px 0 24px;
+      overflow-y: auto;
+    }
+    .sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); padding: 0 24px; margin-bottom: 6px; }
+    .sidebar-title { font-family: 'Lora', serif; font-size: 18px; font-weight: 700; color: var(--text-dark); padding: 0 24px 20px; line-height: 1.35; }
+
+    .progress-wrap { padding: 0 24px 20px; border-bottom: 1px solid var(--border); }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .progress-header span { font-size: 12px; color: var(--text-muted); }
+    .progress-header strong { font-size: 12px; font-weight: 600; color: var(--green-mid); }
+    .progress-bar { width: 100%; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 12%; background: linear-gradient(90deg, var(--green-mid), var(--green-accent)); border-radius: 99px; }
+
+    .nav-list { list-style: none; padding: 14px 12px 0; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 400; color: var(--text-body); text-decoration: none; transition: background .15s; }
+    .nav-item a:hover { background: var(--green-pale); color: var(--green-dark); }
+    .nav-item.active a { background: var(--green-pale); color: var(--green-dark); font-weight: 600; border-left: 3px solid var(--green-mid); padding-left: 9px; }
+    .nav-icon { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--border); color: var(--text-muted); }
+    .nav-item.active .nav-icon { background: var(--green-mid); color: #fff; }
+
+    /* MAIN */
+    .main { flex: 1; overflow-y: auto; padding: 32px 40px 80px; scroll-behavior: smooth; }
+
+    /* Hero */
+    .hero-card { background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 55%, var(--green-light) 100%); border-radius: var(--radius-lg); padding: 40px 48px; position: relative; overflow: hidden; }
+    .hero-card::before, .hero-card::after { content: ''; position: absolute; border-radius: 50%; opacity: .18; background: #fff; }
+    .hero-card::before { width: 260px; height: 260px; top: -60px; right: 60px; }
+    .hero-card::after  { width: 160px; height: 160px; top: 40px; right: 180px; }
+    .hero-bagian { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 10px; }
+    .hero-title { font-family: 'Lora', serif; font-size: 34px; font-weight: 700; color: #fff; line-height: 1.2; position: relative; z-index: 1; }
+
+    .meta-row { background: var(--card-bg); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px 48px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; box-shadow: var(--shadow); }
+    .meta-desc { font-size: 14px; line-height: 1.7; color: var(--text-body); max-width: 560px; }
+    .meta-tags { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .tag-item { font-size: 12.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .tag-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green-accent); flex-shrink: 0; }
+
+    /* Cards */
+    .content-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px 48px; box-shadow: var(--shadow); margin-bottom: 24px; scroll-margin-top: 32px; animation: fadeUp .35s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--green-mid); margin-bottom: 10px; }
+    .section-heading { font-family: 'Lora', serif; font-size: 24px; font-weight: 700; color: var(--text-dark); margin-bottom: 18px; line-height: 1.35; }
+    .section-body { font-size: 15px; line-height: 1.85; color: var(--text-body); margin-bottom: 14px; }
+    .section-body:last-child { margin-bottom: 0; }
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    .highlight-box { background: var(--green-pale); border-left: 3px solid var(--green-mid); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 20px; margin: 20px 0; font-size: 14.5px; color: var(--green-dark); line-height: 1.7; font-style: italic; }
+
+    /* bullet & ordered */
+    .bullet-list { list-style: none; margin: 12px 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+    .bullet-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; color: var(--text-body); line-height: 1.7; }
+    .bullet-list li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green-accent); flex-shrink: 0; margin-top: 8px; }
+    .bullet-list li strong { color: var(--text-dark); }
+
+    .ordered-list { list-style: none; margin: 12px 0; padding: 0; display: flex; flex-direction: column; gap: 9px; counter-reset: ol-counter; }
+    .ordered-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--text-body); line-height: 1.7; counter-increment: ol-counter; }
+    .ordered-list li::before { content: counter(ol-counter); width: 24px; height: 24px; border-radius: 50%; background: var(--green-pale); color: var(--green-dark); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    /* Prinsip cards (Ethos, Logos, Pathos) */
+    .prinsip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+    .prinsip-card { border-radius: var(--radius-md); padding: 22px 20px; border: 1px solid var(--border); transition: box-shadow .2s; }
+    .prinsip-card:hover { box-shadow: 0 4px 18px rgba(34,135,94,.12); }
+    .prinsip-icon { font-size: 26px; margin-bottom: 10px; }
+    .prinsip-label { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+    .prinsip-card p { font-size: 13px; color: var(--text-body); line-height: 1.6; margin-bottom: 8px; }
+    .prinsip-card p:last-child { margin-bottom: 0; }
+    .prinsip-card .tujuan { font-size: 12px; font-style: italic; color: var(--text-muted); }
+
+    .prinsip-card.ethos  { background: #f0fdf4; border-color: #bbf7d0; }
+    .prinsip-card.ethos  .prinsip-label { color: #15803d; }
+    .prinsip-card.logos  { background: #eff6ff; border-color: #bfdbfe; }
+    .prinsip-card.logos  .prinsip-label { color: #1d4ed8; }
+    .prinsip-card.pathos { background: #fdf4ff; border-color: #e9d5ff; }
+    .prinsip-card.pathos .prinsip-label { color: #7e22ce; }
+
+    /* Teknik cards */
+    .teknik-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 16px; }
+    .teknik-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; transition: border-color .2s; }
+    .teknik-card:hover { border-color: var(--green-accent); }
+    .teknik-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--green-pale); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+    .teknik-text strong { display: block; font-size: 13.5px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+    .teknik-text span { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Peran cards */
+    .peran-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+    .peran-card { border-radius: var(--radius-md); padding: 20px 18px; border: 1px solid var(--border); }
+    .peran-icon { font-size: 24px; margin-bottom: 10px; }
+    .peran-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+    .peran-card p { font-size: 13px; color: var(--text-body); line-height: 1.6; margin-bottom: 6px; }
+
+    .peran-card.emosi    { background: #fff7ed; border-color: #fed7aa; }
+    .peran-card.emosi    .peran-label { color: #c2410c; }
+    .peran-card.logika   { background: #eff6ff; border-color: #bfdbfe; }
+    .peran-card.logika   .peran-label { color: #1d4ed8; }
+    .peran-card.kredibel { background: #f0fdf4; border-color: #bbf7d0; }
+    .peran-card.kredibel .peran-label { color: #15803d; }
+
+    /* Audiens cards */
+    .audiens-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 16px; }
+    .audiens-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; }
+    .audiens-card .a-title { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .audiens-card .a-title span { font-size: 18px; }
+    .audiens-card p { font-size: 13.5px; color: var(--text-body); line-height: 1.7; }
+
+    /* scrollbar */
+    .main::-webkit-scrollbar, .sidebar::-webkit-scrollbar { width: 4px; }
+    .main::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <p class="sidebar-label">Modul Pembelajaran</p>
+    <h1 class="sidebar-title">Retorika</h1>
+
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span>Progress Materi</span>
+        <strong>1/5 selesai</strong>
+      </div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active"><a href="#part1"><span class="nav-icon">1</span>Pengertian Retorika</a></li>
+      <li class="nav-item"><a href="#part2"><span class="nav-icon">2</span>Prinsip Dasar: Ethos, Logos, Pathos</a></li>
+      <li class="nav-item"><a href="#part3"><span class="nav-icon">3</span>Teknik Berbicara</a></li>
+      <li class="nav-item"><a href="#part4"><span class="nav-icon">4</span>Memahami Audiens & Gaya Bicara</a></li>
+      <li class="nav-item"><a href="#part5"><span class="nav-icon">5</span>Peran Emosi, Logika & Kredibilitas</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Hero -->
+    <div class="hero-card">
+      <p class="hero-bagian">Materi Utama</p>
+      <h2 class="hero-title">Retorika</h2>
+    </div>
+
+    <!-- Meta row -->
+    <div class="meta-row">
+      <p class="meta-desc">
+        Seni berbicara atau menulis secara efektif dan persuasif yang bertujuan untuk memengaruhi,
+        meyakinkan, atau menarik perhatian orang lain.
+      </p>
+      <div class="meta-tags">
+        <span class="tag-item">Pemateri: A Abdillah</span>
+        <span class="tag-item">Komunikasi & Persuasi</span>
+        <span class="tag-item">Semua Level</span>
+      </div>
+    </div>
+
+    <!-- 1. Pengertian -->
+    <div class="content-card" id="part1">
+      <p class="section-eyebrow">Bagian 1 — Pengantar</p>
+      <h3 class="section-heading">Apa itu Retorika?</h3>
+      <p class="section-body">
+        <strong>Retorika</strong> adalah seni berbicara atau menulis secara efektif dan persuasif yang bertujuan untuk
+        memengaruhi, meyakinkan, atau menarik perhatian orang lain.
+      </p>
+      <div class="highlight-box">
+        Retorika bukan hanya soal kata-kata yang indah — melainkan tentang menyampaikan pesan yang tepat,
+        kepada orang yang tepat, dengan cara yang paling meyakinkan.
+      </div>
+    </div>
+
+    <!-- 2. Prinsip Dasar -->
+    <div class="content-card" id="part2">
+      <p class="section-eyebrow">Bagian 2</p>
+      <h3 class="section-heading">Prinsip Dasar: Ethos, Logos & Pathos</h3>
+      <p class="section-body">Tiga pilar utama yang menopang kekuatan sebuah argumen retoris:</p>
+
+      <div class="prinsip-grid">
+
+        <div class="prinsip-card ethos">
+          <div class="prinsip-icon">🎖️</div>
+          <div class="prinsip-label">Ethos</div>
+          <p>Cara meyakinkan audiens melalui <strong>kredibilitas, reputasi, atau karakter</strong> pembicara. Audiens lebih mudah percaya kepada seseorang yang dianggap ahli, berpengalaman, jujur, dan dapat dipercaya.</p>
+          <ul class="bullet-list" style="margin-top:10px;">
+            <li><div>Menunjukkan keahlian atau pengalaman</div></li>
+            <li><div>Menggunakan sumber terpercaya</div></li>
+            <li><div>Menampilkan sikap yang meyakinkan</div></li>
+          </ul>
+          <p class="tujuan" style="margin-top:10px;">✦ Membangun kepercayaan audiens terhadap pembicara.</p>
+        </div>
+
+        <div class="prinsip-card logos">
+          <div class="prinsip-icon">📊</div>
+          <div class="prinsip-label">Logos</div>
+          <p>Cara memengaruhi audiens melalui <strong>logika, data, fakta, dan penalaran</strong> yang masuk akal.</p>
+          <ul class="bullet-list" style="margin-top:10px;">
+            <li><div>Menggunakan data dan statistik</div></li>
+            <li><div>Menyampaikan hubungan sebab-akibat</div></li>
+            <li><div>Menggunakan argumen yang rasional</div></li>
+          </ul>
+          <p class="tujuan" style="margin-top:10px;">✦ Membuat audiens menerima argumen secara rasional.</p>
+        </div>
+
+        <div class="prinsip-card pathos">
+          <div class="prinsip-icon">💬</div>
+          <div class="prinsip-label">Pathos</div>
+          <p>Cara memengaruhi audiens melalui <strong>emosi dan perasaan</strong> — simpati, harapan, rasa takut, kebanggaan, atau semangat.</p>
+          <ul class="bullet-list" style="margin-top:10px;">
+            <li><div>Menggunakan kata-kata emosional</div></li>
+            <li><div>Menggugah perasaan audiens</div></li>
+            <li><div>Membuat audiens merasa terhubung secara emosional</div></li>
+          </ul>
+          <p class="tujuan" style="margin-top:10px;">✦ Membangkitkan respons emosional audiens.</p>
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <p class="section-eyebrow">Contoh Penerapan</p>
+      <ul class="bullet-list">
+        <li><div><strong>Ethos:</strong> "Sebagai dokter dengan pengalaman 20 tahun, saya menyarankan berhenti merokok."</div></li>
+        <li><div><strong>Logos:</strong> "Polusi udara meningkat 30% dalam lima tahun terakhir sehingga diperlukan transportasi ramah lingkungan."</div></li>
+        <li><div><strong>Pathos:</strong> "Bayangkan anak-anak harus tidur dalam keadaan lapar setiap malam."</div></li>
+      </ul>
+    </div>
+
+    <!-- 3. Teknik Berbicara -->
+    <div class="content-card" id="part3">
+      <p class="section-eyebrow">Bagian 3</p>
+      <h3 class="section-heading">Teknik Berbicara</h3>
+      <p class="section-body">Lima teknik kunci untuk menjadi pembicara yang efektif dan meyakinkan:</p>
+
+      <div class="teknik-grid">
+        <div class="teknik-card">
+          <div class="teknik-icon">📖</div>
+          <div class="teknik-text">
+            <strong>Storytelling</strong>
+            <span>Membuat audiens lebih terhubung secara emosional dengan pembicara melalui narasi yang menarik.</span>
+          </div>
+        </div>
+        <div class="teknik-card">
+          <div class="teknik-icon">🤝</div>
+          <div class="teknik-text">
+            <strong>Bahasa Tubuh</strong>
+            <span>Meningkatkan keyakinan dan menarik perhatian audiens melalui gestur, ekspresi, dan postur yang tepat.</span>
+          </div>
+        </div>
+        <div class="teknik-card">
+          <div class="teknik-icon">📋</div>
+          <div class="teknik-text">
+            <strong>Struktur yang Jelas</strong>
+            <span>Agar pembicaraan mudah dipahami, teratur, dan tidak membingungkan audiens.</span>
+          </div>
+        </div>
+        <div class="teknik-card">
+          <div class="teknik-icon">📈</div>
+          <div class="teknik-text">
+            <strong>Data & Fakta Konkret</strong>
+            <span>Memperkuat argumen agar lebih meyakinkan dan dipercaya audiens.</span>
+          </div>
+        </div>
+        <div class="teknik-card">
+          <div class="teknik-icon">💪</div>
+          <div class="teknik-text">
+            <strong>Latihan Percaya Diri</strong>
+            <span>Agar pembicara lebih lancar, tidak gugup, dan tampil lebih meyakinkan saat berbicara.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Memahami Audiens -->
+    <div class="content-card" id="part4">
+      <p class="section-eyebrow">Bagian 4</p>
+      <h3 class="section-heading">Memahami Audiens & Gaya Bicara</h3>
+
+      <div class="audiens-grid">
+        <div class="audiens-card">
+          <div class="a-title"><span>🧠</span> 1. Rasionalisme Audiens</div>
+          <p>Kemampuan memahami bahwa audiens berpikir secara logis atau rasional dalam menerima informasi.
+          Tujuannya agar pesan lebih mudah dipercaya dan diterima secara logis oleh audiens.</p>
+        </div>
+        <div class="audiens-card">
+          <div class="a-title"><span>🎭</span> 2. Penyesuaian Gaya Bicara (Formal & Non-Formal)</div>
+          <p>Gaya bicara harus disesuaikan dengan situasi dan siapa audiensnya.</p>
+          <ul class="bullet-list" style="margin-top:10px;">
+            <li><div><strong>Formal</strong> — digunakan dalam presentasi, pidato, atau acara resmi.</div></li>
+            <li><div><strong>Non-formal</strong> — digunakan dalam percakapan santai atau situasi tidak resmi.</div></li>
+          </ul>
+          <p style="margin-top:10px; font-size:13.5px; color:var(--text-muted);">Tujuan: membuat komunikasi sesuai konteks, meningkatkan kenyamanan audiens, dan menghindari kesan kaku.</p>
+        </div>
+        <div class="audiens-card">
+          <div class="a-title"><span>💡</span> 3. Gunakan Istilah yang Relevan</div>
+          <p>Istilah yang digunakan harus sesuai dengan tingkat pemahaman audiens agar pesan lebih efektif, menghindari kebingungan, dan tepat sasaran.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Peran Emosi, Logika, Kredibilitas -->
+    <div class="content-card" id="part5">
+      <p class="section-eyebrow">Bagian 5</p>
+      <h3 class="section-heading">Peran Emosi, Logika & Kredibilitas</h3>
+      <p class="section-body">Ketiga elemen ini bekerja bersama untuk menciptakan komunikasi yang kuat dan persuasif:</p>
+
+      <div class="peran-grid">
+
+        <div class="peran-card emosi">
+          <div class="peran-icon">❤️</div>
+          <div class="peran-label">Emosi</div>
+          <p>Menyentuh perasaan audiens agar tergerak secara emosional terhadap pesan yang disampaikan.</p>
+          <ul class="bullet-list" style="margin-top:10px;">
+            <li><div>Membangkitkan empati, simpati, atau kepedulian</div></li>
+            <li><div>Membuat pesan lebih berkesan dan mudah diingat</div></li>
+            <li><div>Mendorong audiens untuk bertindak</div></li>
+          </ul>
+        </div>
+
+        <div class="peran-card logika">
+          <div class="peran-icon">🔍</div>
+          <div class="peran-label">Logika</div>
+          <p>Meyakinkan audiens melalui fakta, data, dan alasan yang masuk akal.</p>
+          <ul class="bullet-list" style="margin-top:10px;">
+            <li><div>Memberikan bukti yang mendukung argumen</div></li>
+            <li><div>Membuat pesan lebih rasional dan dapat dipercaya</div></li>
+            <li><div>Menghindari opini yang tidak berdasar</div></li>
+          </ul>
+        </div>
+
+        <div class="peran-card kredibel">
+          <div class="peran-icon">⭐</div>
+          <div class="peran-label">Kredibilitas</div>
+          <p>Membangun kepercayaan audiens terhadap pembicara.</p>
+          <ul class="bullet-list" style="margin-top:10px;">
+            <li><div>Menunjukkan bahwa pembicara kompeten dan dapat dipercaya</div></li>
+            <li><div>Meningkatkan keyakinan audiens terhadap pesan</div></li>
+            <li><div>Membuat audiens lebih terbuka terhadap argumen</div></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="highlight-box" style="margin-top:24px;">
+        Retorika yang efektif memadukan ketiganya secara seimbang — terlalu mengandalkan emosi tanpa logika
+        akan terkesan manipulatif, sementara logika tanpa emosi bisa terasa dingin dan tidak menyentuh hati.
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.content-card[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          const link = item.querySelector('a');
+          item.classList.toggle('active', link && link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

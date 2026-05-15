@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Otoritas Informasi – Modul Pembelajaran</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #1a6b4a;
+      --green-mid:    #22875e;
+      --green-light:  #2fa674;
+      --green-pale:   #e8f5ef;
+      --green-accent: #3ec98a;
+      --text-dark:    #1a2228;
+      --text-body:    #3d4f5a;
+      --text-muted:   #8fa3ae;
+      --bg:           #f2f4f6;
+      --sidebar-bg:   #ffffff;
+      --card-bg:      #ffffff;
+      --border:       #e2e8ed;
+      --radius-sm:    6px;
+      --radius-md:    12px;
+      --radius-lg:    18px;
+      --shadow:       0 2px 16px rgba(0,0,0,.07);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-dark);
+    }
+
+    /* ── SHELL ── */
+    .shell {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 290px;
+      flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 0 24px;
+      overflow-y: auto;
+    }
+
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 24px;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-title {
+      font-family: 'Lora', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+      padding: 0 24px 20px;
+      line-height: 1.35;
+    }
+
+    .progress-wrap {
+      padding: 0 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .progress-header span { font-size: 12px; color: var(--text-muted); }
+    .progress-header strong { font-size: 12px; font-weight: 600; color: var(--green-mid); }
+    .progress-bar {
+      width: 100%; height: 4px;
+      background: var(--border);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 8.33%;
+      background: linear-gradient(90deg, var(--green-mid), var(--green-accent));
+      border-radius: 99px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 14px 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-body);
+      text-decoration: none;
+      transition: background .15s;
+    }
+    .nav-item a:hover { background: var(--green-pale); color: var(--green-dark); }
+    .nav-item.active a {
+      background: var(--green-pale);
+      color: var(--green-dark);
+      font-weight: 600;
+      border-left: 3px solid var(--green-mid);
+      padding-left: 9px;
+    }
+
+    .nav-icon {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      background: var(--border);
+      color: var(--text-muted);
+    }
+    .nav-item.active .nav-icon {
+      background: var(--green-mid);
+      color: #fff;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 40px 80px;
+      scroll-behavior: smooth;
+    }
+
+    /* hero */
+    .hero-card {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 55%, var(--green-light) 100%);
+      border-radius: var(--radius-lg);
+      padding: 40px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before, .hero-card::after {
+      content: ''; position: absolute; border-radius: 50%;
+      opacity: .18; background: #fff;
+    }
+    .hero-card::before { width: 260px; height: 260px; top: -60px; right: 60px; }
+    .hero-card::after  { width: 160px; height: 160px; top: 40px; right: 180px; }
+
+    .hero-bagian {
+      font-size: 11px; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: 'Lora', serif; font-size: 34px; font-weight: 700;
+      color: #fff; line-height: 1.2; position: relative; z-index: 1;
+    }
+
+    /* meta row */
+    .meta-row {
+      background: var(--card-bg);
+      border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      padding: 22px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px; box-shadow: var(--shadow);
+    }
+    .meta-desc { font-size: 14px; line-height: 1.7; color: var(--text-body); max-width: 560px; }
+    .meta-tags { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .tag-item {
+      font-size: 12.5px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tag-item::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green-accent); flex-shrink: 0;
+    }
+
+    /* content card */
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 48px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      scroll-margin-top: 32px;
+    }
+
+    .section-eyebrow {
+      font-size: 10.5px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--green-mid); margin-bottom: 10px;
+    }
+    .section-heading {
+      font-family: 'Lora', serif; font-size: 24px; font-weight: 700;
+      color: var(--text-dark); margin-bottom: 20px; line-height: 1.35;
+    }
+    .section-body {
+      font-size: 15px; line-height: 1.85; color: var(--text-body); margin-bottom: 14px;
+    }
+    .section-body:last-child { margin-bottom: 0; }
+
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    /* highlight box */
+    .highlight-box {
+      background: var(--green-pale);
+      border-left: 3px solid var(--green-mid);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px 20px; margin: 20px 0;
+      font-size: 14.5px; color: var(--green-dark);
+      line-height: 1.7; font-style: italic;
+    }
+
+    /* bullet list */
+    .bullet-list {
+      list-style: none; margin: 14px 0; padding: 0;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .bullet-list li {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 14.5px; color: var(--text-body); line-height: 1.7;
+    }
+    .bullet-list li::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green-accent); flex-shrink: 0; margin-top: 8px;
+    }
+    .bullet-list li strong { color: var(--text-dark); }
+
+    /* ordered list */
+    .ordered-list {
+      list-style: none; margin: 14px 0; padding: 0;
+      display: flex; flex-direction: column; gap: 10px;
+      counter-reset: ol-counter;
+    }
+    .ordered-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 14.5px; color: var(--text-body); line-height: 1.7;
+      counter-increment: ol-counter;
+    }
+    .ordered-list li::before {
+      content: counter(ol-counter);
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--green-pale); color: var(--green-dark);
+      font-weight: 700; font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* classification cards */
+    .class-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px;
+    }
+    .class-card {
+      border-radius: var(--radius-md);
+      padding: 20px 18px;
+      border: 1px solid var(--border);
+      transition: box-shadow .2s;
+    }
+    .class-card:hover { box-shadow: 0 4px 18px rgba(34,135,94,.12); }
+    .class-card .class-icon { font-size: 22px; margin-bottom: 10px; }
+    .class-card .class-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .class-card p { font-size: 13px; color: var(--text-body); line-height: 1.6; }
+
+    .class-card.publik { background: #f0fdf4; border-color: #bbf7d0; }
+    .class-card.publik .class-label { color: #15803d; }
+
+    .class-card.internal { background: #eff6ff; border-color: #bfdbfe; }
+    .class-card.internal .class-label { color: #1d4ed8; }
+
+    .class-card.rahasia { background: #fff7ed; border-color: #fed7aa; }
+    .class-card.rahasia .class-label { color: #c2410c; }
+
+    /* SWOT grid */
+    .swot-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 20px;
+    }
+    .swot-card {
+      border-radius: var(--radius-md); padding: 18px 20px; border: 1px solid var(--border);
+    }
+    .swot-card .swot-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+    .swot-card p { font-size: 13px; color: var(--text-body); }
+    .swot-card.s { background: #f0fdf4; } .swot-card.s .swot-label { color: #15803d; }
+    .swot-card.w { background: #fff7ed; } .swot-card.w .swot-label { color: #c2410c; }
+    .swot-card.o { background: #eff6ff; } .swot-card.o .swot-label { color: #1d4ed8; }
+    .swot-card.t { background: #fdf4ff; } .swot-card.t .swot-label { color: #7e22ce; }
+
+    /* warning box */
+    .warning-box {
+      background: #fff7ed; border-left: 3px solid #f97316;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px 20px; margin: 20px 0;
+      font-size: 14px; color: #9a3412; line-height: 1.7;
+    }
+    .warning-box strong { color: #7c2d12; }
+
+    /* scrollbar */
+    .main::-webkit-scrollbar, .sidebar::-webkit-scrollbar { width: 4px; }
+    .main::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <p class="sidebar-label">Modul Pembelajaran</p>
+    <h1 class="sidebar-title">Otoritas Informasi</h1>
+
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span>Progress Materi</span>
+        <strong>1/12 selesai</strong>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active"><a href="#part1"><span class="nav-icon">1</span>Identitas Otoritas Informasi</a></li>
+      <li class="nav-item"><a href="#part2"><span class="nav-icon">2</span>Fondasi Otoritas Informasi</a></li>
+      <li class="nav-item"><a href="#part3"><span class="nav-icon">3</span>Informatika Arsitektur Hukum</a></li>
+      <li class="nav-item"><a href="#part4"><span class="nav-icon">4</span>Studi Kasus: Kebocoran Data</a></li>
+      <li class="nav-item"><a href="#part5"><span class="nav-icon">5</span>Kasus IGRS Komdigi</a></li>
+      <li class="nav-item"><a href="#part6"><span class="nav-icon">6</span>Klasifikasi Otoritas Informasi</a></li>
+      <li class="nav-item"><a href="#part7"><span class="nav-icon">7</span>Hukum Proporsionalitas</a></li>
+    </ul>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- Hero -->
+    <div class="hero-card">
+      <p class="hero-bagian">Materi Utama</p>
+      <h2 class="hero-title">Otoritas Informasi</h2>
+    </div>
+
+    <!-- Meta row -->
+    <div class="meta-row">
+      <p class="meta-desc">
+        Manifestasi kedaulatan baru dalam kacamata filosofi kekuasaan modern —
+        kapasitas pemimpin untuk mengorkestrasi aliran data guna memitigasi ancaman
+        dan menjaga stabilitas organisasi.
+      </p>
+      <div class="meta-tags">
+        <span class="tag-item">Pemateri: A Ikmal Riza</span>
+        <span class="tag-item">Manajemen Informasi</span>
+        <span class="tag-item">Semua Level</span>
+      </div>
+    </div>
+
+    <!-- 1. Identitas -->
+    <div class="content-card" id="part1">
+      <p class="section-eyebrow">Bagian 1</p>
+      <h3 class="section-heading">Identitas Otoritas Informasi</h3>
+      <p class="section-body">
+        Dalam kacamata filosofi kekuasaan modern, <strong>Otoritas Informasi</strong> adalah manifestasi kedaulatan baru.
+        Ia bukan sekadar kepemilikan data, melainkan kapasitas seorang pemimpin untuk mengorkestrasi aliran data guna
+        memitigasi ancaman dan menjaga stabilitas organisasi.
+      </p>
+      <p class="section-body">
+        Serta kemampuan untuk memutuskan data mana yang menjadi aset, mana yang menjadi rahasia, dan bagaimana data
+        tersebut melindungi eksistensi organisasi dari intervensi eksternal.
+      </p>
+    </div>
+
+    <!-- 2. Fondasi -->
+    <div class="content-card" id="part2">
+      <p class="section-eyebrow">Bagian 2</p>
+      <h3 class="section-heading">Fondasi Otoritas Informasi</h3>
+      <p class="section-body">Untuk menjalankan otoritas ini, diperlukan tiga fondasi yang kokoh:</p>
+      <ul class="bullet-list">
+        <li>
+          <div><strong>Struktur</strong> — bagaimana data dikategorikan dan disimpan secara sistematis (taksonomi data).
+          Tanpa struktur, informasi hanyalah "sampah digital" yang membingungkan.</div>
+        </li>
+        <li>
+          <div><strong>Validasi</strong> — mekanisme untuk memastikan integritas data (anti-manipulasi).
+          Otoritas runtuh jika data yang dikelola ternyata palsu atau terdistorsi.</div>
+        </li>
+        <li>
+          <div><strong>Hak Akses (Privilege)</strong> — penentuan siapa yang berhak mengetahui apa.
+          Ini adalah inti dari pengendalian hirarki informasi.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 3. Arsitektur Hukum -->
+    <div class="content-card" id="part3">
+      <p class="section-eyebrow">Bagian 3</p>
+      <h3 class="section-heading">Informatika Arsitektur Hukum</h3>
+      <p class="section-body">
+        Teknologi dan hukum harus menyatu untuk menciptakan payung kedaulatan. Dua konsep kunci yang menopangnya:
+      </p>
+      <ul class="bullet-list">
+        <li>
+          <div><strong>Digital Sovereignty (Kedaulatan Digital)</strong> — prinsip bahwa data suatu bangsa atau
+          organisasi harus tunduk pada hukum entitas tersebut, bukan entitas asing tempat server berada.</div>
+        </li>
+        <li>
+          <div><strong>Otoritas Tertinggi</strong> — dalam sistem informasi, harus ada satu titik kebenaran
+          (<em>Single Source of Truth</em>) yang secara legal diakui sebagai rujukan final dalam pengambilan
+          keputusan hukum maupun teknis.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 4. Studi Kasus Kebocoran Data -->
+    <div class="content-card" id="part4">
+      <p class="section-eyebrow">Bagian 4 — Studi Kasus</p>
+      <h3 class="section-heading">Kebocoran 58 Juta Data Pendidikan (2025)</h3>
+
+      <div class="warning-box">
+        <strong>⚠ Peringatan Kritis:</strong> Tahun 2025 menjadi titik balik kelam ketika 58 juta data pendidikan —
+        termasuk identitas guru, siswa, dan rekam medis akademik — jatuh ke tangan sindikat jahat.
+      </div>
+
+      <p class="section-body">
+        Dampaknya berupa profiling massal terhadap generasi muda Indonesia untuk kepentingan penipuan finansial dan
+        eksploitasi data.
+      </p>
+
+      <div class="highlight-box">
+        Pelajaran yang bisa diambil: lemahnya otoritas informasi pada satu titik dapat meruntuhkan kedaulatan sosial
+        secara nasional.
+      </div>
+    </div>
+
+    <!-- 5. Kasus IGRS -->
+    <div class="content-card" id="part5">
+      <p class="section-eyebrow">Bagian 5 — Studi Kasus</p>
+      <h3 class="section-heading">Kasus IGRS Komdigi</h3>
+      <p class="section-body">
+        Kasus <strong>Indonesia Game Rating System (IGRS)</strong> di bawah Kementerian Komunikasi dan Digital (Komdigi)
+        menyoroti dua hal penting:
+      </p>
+      <ul class="bullet-list">
+        <li>
+          <div>Pentingnya kemampuan negara dalam <strong>mengklasifikasikan konten digital</strong> yang masuk ke ruang publik.</div>
+        </li>
+        <li>
+          <div>Penggunaan otoritas informasi untuk <strong>melindungi nilai-nilai lokal</strong> melalui sistem rating dan
+          sensor yang terautomasi namun tetap akuntabel secara hukum.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 6. Klasifikasi -->
+    <div class="content-card" id="part6">
+      <p class="section-eyebrow">Bagian 6</p>
+      <h3 class="section-heading">Klasifikasi Otoritas Informasi</h3>
+      <p class="section-body">Informasi dibagi menjadi tiga lapis untuk menjaga keamanan:</p>
+
+      <div class="class-grid">
+        <div class="class-card publik">
+          <div class="class-icon">🌐</div>
+          <div class="class-label">Publik</div>
+          <p>Informasi yang dapat dikonsumsi umum tanpa risiko kerugian strategis.</p>
+        </div>
+        <div class="class-card internal">
+          <div class="class-icon">🏢</div>
+          <div class="class-label">Internal</div>
+          <p>Informasi yang hanya beredar di lingkup organisasi untuk menjalankan fungsi operasional.</p>
+        </div>
+        <div class="class-card rahasia">
+          <div class="class-icon">🔒</div>
+          <div class="class-label">Rahasia (Confidential)</div>
+          <p>Informasi vital — seperti kunci enkripsi atau data intelijen — yang jika bocor dapat mengakibatkan kegagalan sistemik.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Hukum Proporsionalitas -->
+    <div class="content-card" id="part7">
+      <p class="section-eyebrow">Bagian 7</p>
+      <h3 class="section-heading">Hukum Proporsionalitas</h3>
+      <p class="section-body">
+        Dalam teori manajemen risiko digital, berlaku hukum proporsionalitas:
+      </p>
+      <div class="highlight-box">
+        "Semakin besar Otoritas Informasi yang dipegang, semakin tinggi <strong>RUKO</strong>
+        (Ruang Kontrol / Risk Oversight) yang harus diintegrasi."
+      </div>
+      <p class="section-body">
+        Prinsip ini menegaskan bahwa otoritas dan tanggung jawab berjalan beriringan — kepemilikan data yang lebih luas
+        menuntut sistem pengawasan dan pengendalian risiko yang lebih ketat dan komprehensif.
+      </p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Highlight active nav on scroll
+  const sections = document.querySelectorAll('.content-card[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          const link = item.querySelector('a');
+          item.classList.toggle('active', link && link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

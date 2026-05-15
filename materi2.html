@@ -178,27 +178,6 @@
         </article>
     </main>
 
-    <script>
-        // Highlight nav item saat scroll
-        const sections = document.querySelectorAll('.materi-section[id]');
-        const navLinks = document.querySelectorAll('.nav-parts li a');
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    navLinks.forEach(link => {
-                        link.parentElement.classList.remove('active');
-                        if (link.getAttribute('href') === '#' + id) {
-                            link.parentElement.classList.add('active');
-                        }
-                    });
-                }
-            });
-        }, { rootMargin: '-30% 0px -60% 0px' });
-
-        sections.forEach(s => observer.observe(s));
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>

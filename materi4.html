@@ -166,7 +166,9 @@
         <span>Progress Materi</span>
         <strong>1/5 selesai</strong>
       </div>
-      <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
     </div>
 
     <ul class="nav-list">
@@ -196,7 +198,6 @@
       <div class="meta-tags">
         <span class="tag-item">Pemateri: A Abdillah</span>
         <span class="tag-item">Komunikasi & Persuasi</span>
-        <span class="tag-item">Semua Level</span>
       </div>
     </div>
 
@@ -394,23 +395,6 @@
   </main>
 </div>
 
-<script>
-  const sections = document.querySelectorAll('.content-card[id]');
-  const navItems = document.querySelectorAll('.nav-item');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        navItems.forEach(item => {
-          const link = item.querySelector('a');
-          item.classList.toggle('active', link && link.getAttribute('href') === '#' + id);
-        });
-      }
-    });
-  }, { threshold: 0.35 });
-
-  sections.forEach(s => observer.observe(s));
-</script>
+<script src="script.js"></script>
 </body>
 </html>

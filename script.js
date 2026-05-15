@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // =============================================
-    // 1. ACTIVE NAV BASED ON SCROLL POSITION
+    // 1. ACTIVE NAV BASED ON SCROLL POSITION (code 1 - nav-parts)
     // =============================================
     const sections = document.querySelectorAll(".materi-section");
     const navItems = document.querySelectorAll(".nav-parts li");
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // =============================================
-    // 2. ACTIVE NAV (INTERSECTION OBSERVER)
+    // 2. ACTIVE NAV (INTERSECTION OBSERVER - code 2 - nav-item)
     // =============================================
     const contentCards = document.querySelectorAll('.content-card[id]');
     const navItemsAlt = document.querySelectorAll('.nav-item');
@@ -46,25 +46,23 @@ document.addEventListener("DOMContentLoaded", function () {
     contentCards.forEach(s => navObserver.observe(s));
 
     // =============================================
-    // 3. SCROLL ANIMATION (Intersection Observer)
+    // 3. SCROLL ANIMATION
     // =============================================
     const animatedElements = document.querySelectorAll('.hidden-animate');
 
     const animationObserver = new IntersectionObserver(
-        (entries, animationObserver) => {
+        (entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('show-animate');
-                    animationObserver.unobserve(entry.target);
+                    observer.unobserve(entry.target);
                 }
             });
         },
         { threshold: 0.15 }
     );
 
-    animatedElements.forEach(el => {
-        animationObserver.observe(el);
-    });
+    animatedElements.forEach(el => animationObserver.observe(el));
 
     // =============================================
     // 4. SLIDER FOTO GRUP
@@ -81,36 +79,53 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // =============================================
-    // 5. PROGRESS BAR
+    // 5. PROGRESS BAR - code 1 (nav-parts + window scroll)
     // =============================================
     function updateProgressBar() {
-    // 1. Ambil daftar materi menggunakan class '.nav-list' (sesuai kodingan kanan)
-    const allSteps = document.querySelectorAll('.nav-parts li');
-    
-    // 2. Cari urutan materi yang sedang aktif
-    const activeStep = Array.from(allSteps).findIndex(li => li.classList.contains('active')) + 1;
-    const totalSteps = allSteps.length;
+        const allSteps = document.querySelectorAll('.nav-parts li');
+        const activeStep = Array.from(allSteps).findIndex(li => li.classList.contains('active')) + 1;
+        const totalSteps = allSteps.length;
 
-    // Jika daftar tidak ditemukan, jangan jalankan sisanya
-    if (totalSteps === 0) return;
+        if (totalSteps === 0) return;
 
-    // 3. Hitung persentase
-    const percentage = (activeStep / totalSteps) * 100;
+        const percentage = (activeStep / totalSteps) * 100;
 
-    // 4. Update Teks "X/X selesai"
-    const textElement = document.getElementById('progress-text');
-    if (textElement) {
-        textElement.innerText = `${activeStep}/${totalSteps} selesai`;
+        const textElement = document.getElementById('progress-text');
+        if (textElement) {
+            textElement.innerText = `${activeStep}/${totalSteps} selesai`;
+        }
+
+        const fillElement = document.getElementById('progress-fill');
+        if (fillElement) {
+            fillElement.style.width = percentage + "%";
+        }
     }
 
-    // 5. Update Lebar Bar Hijau
-    const fillElement = document.getElementById('progress-fill');
-    if (fillElement) {
-        fillElement.style.width = percentage + "%";
-    }
-}
+    updateProgressBar();
 
-// Jalankan saat halaman dimuat
-document.addEventListener("DOMContentLoaded", updateProgressBar);
+    // =============================================
+    // 6. PROGRESS BAR - code 2 (nav-item + .main scroll)
+    // =============================================
+    const mainEl = document.querySelector('.main');
+
+    if (mainEl) {
+        // Hitung otomatis jumlah bagian dari nav
+        const totalParts = document.querySelectorAll('.nav-list .nav-item').length;
+
+        mainEl.addEventListener('scroll', () => {
+            const scrollTop = mainEl.scrollTop;
+            const scrollHeight = mainEl.scrollHeight - mainEl.clientHeight;
+            const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+
+            const fillElement = document.querySelector('.progress-fill');
+            if (fillElement) fillElement.style.width = progress + '%';
+
+            const completed = Math.max(1, Math.ceil((progress / 100) * totalParts));
+            const textElement = document.querySelector('.progress-header strong');
+            if (textElement) {
+                textElement.textContent = Math.min(completed, totalParts) + '/' + totalParts + ' selesai';
+            }
+        });
+    }
 
 });
